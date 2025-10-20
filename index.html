@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversor de Sentenças</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        button.active {
+            background-color: #007bff;
+            color: white;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            box-sizing: border-box;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            display: none;
+        }
+        .loading {
+            display: none;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <h1>Conversor de Sentenças</h1>
+    
+    <div>
+        <h3>Selecione a conversão:</h3>
+        <button id="nlToLogicBtn" class="active" onclick="selectMode('nl-to-logic')">
+            Linguagem Natural → Lógica
+        </button>
+        <button id="logicToNlBtn" onclick="selectMode('logic-to-nl')">
+            Lógica → Linguagem Natural
+        </button>
+    </div>
+
+    <div>
+        <label id="inputLabel" for="inputText">Digite a sentença em linguagem natural:</label>
+        <textarea id="inputText" rows="4" placeholder="Ex: Se chove, então a rua fica molhada"></textarea>
+    </div>
+
+    <button onclick="convertText()" style="background-color: #28a745; color: white;">
+        Converter
+    </button>
+
+    <div class="loading" id="loading">Convertendo...</div>
+
+    <div id="result">
+        <h3>Resultado:</h3>
+        <p><strong>Original:</strong> <span id="original"></span></p>
+        <p><strong>Convertido:</strong> <span id="converted"></span></p>
+        <p><strong>Explicação:</strong> <span id="explanation"></span></p>
+    </div>
+
+    <script>
+        let currentMode = 'nl-to-logic';
+        const API_BASE = 'http://localhost:8000';
+
+        function selectMode(mode) {
+            currentMode = mode;
+            document.getElementById('nlToLogicBtn').classList.toggle('active');
+            document.getElementById('logicToNlBtn').classList.toggle('active');
+            
+            const label = document.getElementById('inputLabel');
+            const input = document.getElementById('inputText');
+            
+            if (mode === 'nl-to-logic') {
+                label.textContent = 'Digite a sentença em linguagem natural:';
+                input.placeholder = 'Ex: Se chove, então a rua fica molhada';
+            } else {
+                label.textContent = 'Digite a fórmula lógica:';
+                input.placeholder = 'Ex: p → q';
+            }
+            
+            input.value = '';
+            document.getElementById('result').style.display = 'none';
+        }
+
+        async function convertText() {
+            const text = document.getElementById('inputText').value.trim();
+            
+            if (!text) {
+                alert('Por favor, preencha o campo de entrada');
+                return;
+            }
+
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('result').style.display = 'none';
+
+            try {
+                const endpoint = currentMode === 'nl-to-logic' 
+                    ? '/convert/nl-to-logic' 
+                    : '/convert/logic-to-nl';
+                
+                const payload = currentMode === 'nl-to-logic'
+                    ? { natural_language: text }
+                    : { logical_expression: text };
+
+                const response = await fetch(API_BASE + endpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Erro: ${response.status}`);
+                }
+
+                const data = await response.json();
+                
+                document.getElementById('original').textContent = data.original;
+                document.getElementById('converted').textContent = data.converted;
+                document.getElementById('explanation').textContent = data.explanation;
+                
+                document.getElementById('result').style.display = 'block';
+            } catch (error) {
+                alert('Erro na conversão: ' + error.message);
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+            }
+        }
+
+        document.getElementById('inputText').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && e.ctrlKey) {
+                convertText();
+            }
+        });
+    </script>
+</body>
+</html>
