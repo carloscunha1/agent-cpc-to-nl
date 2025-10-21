@@ -25,10 +25,10 @@ app.add_middleware(
 
 
 class nl_to_logic_input(BaseModel):
-    natural_language: str = Field(description='Sentence in natural language to convert')
+    natural_language: str = Field(description='Sentença em linguagem natural')
     
 class logic_to_nl_input(BaseModel):
-    logical_expression: str = Field(description='Logical expression in propositional calculus')
+    logical_expression: str = Field(description='Fórmula do cálculo proposicional clássico')
 
 class logical_conversion(BaseModel):
     original: str
