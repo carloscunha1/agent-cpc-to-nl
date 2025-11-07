@@ -35,7 +35,7 @@ class logical_conversion(BaseModel):
     converted: str
     explanation: str
 
-# Define natural language to logic flow
+# Define flow da linguagem natural para sentença lógica
 @ai.flow()
 async def nl_to_logic_flow(input_data: nl_to_logic_input) -> logical_conversion:
     prompt = f"""Converta a seguinte sentença em linguagem natural para fórmula do cálculo proposicional clássico:
@@ -52,13 +52,14 @@ async def nl_to_logic_flow(input_data: nl_to_logic_input) -> logical_conversion:
     
     return result.output
 
-# Define logic to natural language flow
+# Define flow da sentença lógica para linguagem natural
 @ai.flow()
 async def logic_to_nl_flow(input_data: logic_to_nl_input) -> logical_conversion:
-    prompt = f"""Converta a seguinte fórmula do cálculo proposicional cássico para uma sentença em linguagem natural:
+    prompt = f"""Converta a seguinte fórmula do cálculo proposicional cássico para uma sentença genérica em linguagem natural:
     
     Fórmula: {input_data.logical_expression}
     
+    Caso a fórmula não tenha descrição para as variaveis, defina às para gerar uma frase que faça sentido
     Deixe ela clara e compreensível."""
     
     result = await ai.generate(prompt=prompt, output_schema=logical_conversion)
