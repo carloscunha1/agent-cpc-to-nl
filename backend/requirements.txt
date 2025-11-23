@@ -1,7 +1,7 @@
 fastapi
 genkit
 genkit-plugin-google-genai
-google-genai0
+google-genai
 httpx
 pydantic
 python-dotenv
