@@ -1,9 +1,6 @@
 fastapi
 genkit
 genkit-plugin-google-genai
-google-genai
-httpx
 pydantic
 python-dotenv
-requests
 uvicorn
