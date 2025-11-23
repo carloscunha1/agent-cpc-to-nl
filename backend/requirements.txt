@@ -1,6 +1,6 @@
-fastapi
-genkit
-genkit-plugin-google-genai
-pydantic
-python-dotenv
-uvicorn
+fastapi>=0.111.0
+genkit>=0.11.0
+genkit-plugin-google-genai>=0.11.0
+pydantic>=2.7.4
+python-dotenv>=1.0.1
+uvicorn[standard]>=0.29.0
