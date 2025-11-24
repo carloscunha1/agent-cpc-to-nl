@@ -1,5 +1,12 @@
 # Conversor de Sentenças - Lógica Proposicional
 
+## Link para testes:
+https://agent-cpc-to-79am665t4-carlos-cunhas-projects.vercel.app/
+
+## URL do vídeo de utilização:
+
+https://youtu.be/Z39_0DXu4co
+
 ## 📋 Escopo do Projeto
 
 Este projeto é um conversor bidirecional entre **linguagem natural** e **cálculo proposicional clássico**, desenvolvido como parte da disciplina de Lógica para Computação da FACEF.
@@ -42,7 +49,7 @@ README.MD                 # Documentação (este arquivo)
 | POST | `/convert/logic-to-nl` | Converte fórmula lógica para linguagem natural |
 | GET  | `/`                    | Informações da API |
 
-## 🚀 Como Usar (rápido)
+## 🚀 Como Usar Localmente (rápido)
 
 Instalar dependências e executar o backend (ver `backend/requirements.txt`):
 
@@ -110,7 +117,7 @@ Análise: Frase direta, sujeito e consequência explícitos. O sistema normalmen
 2) Conjunção com negação (acerto com atenção ao escopo)
 
 - Entrada (NL): "Não chove e a rua está molhada"
-- Saída possível (Lógica): (¬p) ∧ q
+- Saída possível (Lógica): ¬p ∧ q
 - Mapeamento: p = "chove", q = "a rua está molhada"
 
 Análise: O escopo da negação é "chove" — aqui o parser heurístico lida bem. Risco: em sentenças como "Não (chove e a rua está molhada)" o resultado muda; por isso, o sistema sempre tenta inserir parênteses para deixar o escopo explícito.
@@ -134,6 +141,7 @@ Mitigação: pré-processamento que detecta conjunções no antecedente e agrupa
 5) Frases com pronomes e implicatura (difícil para LLMs simples)
 
 - Entrada (NL): "Se João chega atrasado, ele perde a prova"
+- Saída: p → q
 
 Desafio: resolver que "ele" refere-se a "João" — normalmente o sistema (com LLM) resolve por co-referência, mas heurísticas simples podem falhar.
 
